@@ -1,0 +1,25 @@
+<odoo>
+
+    <record id="asset_adjustment_categ" model="ir.module.category">
+        <field name="name">Asset Adjustment</field>
+    </record>
+
+    <record id="asset_adjustment_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="ivs_asset_adjustment.asset_adjustment_categ"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="asset_adjustment_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="category_id" ref="ivs_asset_adjustment.asset_adjustment_categ"/>
+        <field name="implied_ids" eval="[(4, ref('ivs_asset_adjustment.asset_adjustment_user'))]"/>
+    </record>
+
+     <record id="asset_adjustment_company_rule" model="ir.rule">
+        <field name="name">Asset adjustment multi company rule</field>
+        <field name="model_id" ref="model_asset_adjustment"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
