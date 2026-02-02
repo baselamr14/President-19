@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- =========================
+         1) FORM VIEW INHERIT
+         ========================= -->
+    <record id="view_account_asset_form_inherit" model="ir.ui.view">
+        <field name="name">account.asset.form.inherit.ivs_asset_management</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+
+            <!-- Add buttons near the standard Confirm button (Odoo 17+ uses action_validate usually) -->
+            <xpath expr="//header//button[@name='validate']" position="before">
+
+                <!-- Move Asset: only when Running/open -->
+                <button name="action_asset_move"
+                        type="object"
+                        string="Move Asset"
+                        class="btn-primary"
+                        invisible="state != 'open'"
+                        groups="ivs_asset_management.asset_move_access_group"/>
+
+                <!-- Print QR: only if class allows printing -->
+                <button name="action_print_asset"
+                        type="object"
+                        string="Print QR"
+                        invisible="not print_qr"/>
+            </xpath>
+
+            <!-- Add image next to the title area -->
+            <xpath expr="//sheet//div[hasclass('oe_title')]" position="before">
+                <field name="image_1920"
+                       widget="image"
+                       class="oe_avatar"
+                       options="{'preview_image': 'image_1920'}"/>
+            </xpath>
+
+            <!-- Show asset_code under the title -->
+            <xpath expr="//sheet//div[hasclass('oe_title')]" position="inside">
+                <h2>
+                    <field name="asset_code" readonly="1"/>
+                </h2>
+            </xpath>
+
+            <!-- =========================
+                 2) ADD NEW TAB: Asset Details
+                 ========================= -->
+            <xpath expr="//notebook" position="inside">
+                <page string="Asset Details">
+                    <group>
+                        <group>
+                            <field name="description"/>
+                            <field name="responsible_id"/>
+                            <field name="have_model_class" invisible="1"/>
+                            <field name="required_location" invisible="1"/>
+                            <field name="print_qr" invisible="1"/>
+
+                            <!-- Asset Class -->
+                            <field name="asset_class_id"
+                                   readonly="have_model_class or state == 'open'"
+                                   required="1"/>
+
+                            <!-- Location: required only if asset class requires it -->
+                            <field name="location_id"
+                                   required="required_location"
+                                   readonly="state != 'draft'"/>
+                        </group>
+
+                        <group string="QR">
+                            <field name="qr_code" widget="image" readonly="1"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- =========================
+         3) SEARCH VIEW INHERIT
+         Allow searching by asset_code too
+         ========================= -->
+    <record id="view_account_asset_search_inherit" model="ir.ui.view">
+        <field name="name">account.asset.search.inherit.ivs_asset_management</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>
+        <field name="arch" type="xml">
+
+            <!-- Extend search by name OR asset_code -->
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="filter_domain">['|',('name','ilike',self),('asset_code','ilike',self)]</attribute>
+            </xpath>
+
+            <!-- Add some useful group-by filters -->
+            <xpath expr="//group" position="inside">
+                <filter string="Asset Class" name="asset_class" domain="[]" context="{'group_by':'asset_class_id'}"/>
+                <filter string="Asset Location" name="asset_location" domain="[]" context="{'group_by':'location_id'}"/>
+                <filter string="Asset Responsible" name="asset_responsible" domain="[]" context="{'group_by':'responsible_id'}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- =========================
+         4) LIST VIEW INHERIT (tree -> list in Odoo 19)
+         Add columns
+         ========================= -->
+    <record id="view_account_asset_list_inherit" model="ir.ui.view">
+        <field name="name">account.asset.list.inherit.ivs_asset_management</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="asset_code"/>
+                <field name="responsible_id" optional="hide"/>
+                <field name="asset_class_id" optional="hide"/>
+                <field name="location_id" optional="hide"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+    <!-- =========================
+         5) SERVER ACTIONS (optional)
+         Tree action buttons
+         ========================= -->
+
+    <record id="model_account_asset_action_confirm" model="ir.actions.server">
+        <field name="name">Confirm</field>
+        <field name="model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_validate()</field>
+    </record>
+
+    <record id="model_account_asset_action_print" model="ir.actions.server">
+        <field name="name">Print QR</field>
+        <field name="model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_model_id" ref="account_asset.model_account_asset"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">action = records.action_print_asset()</field>
+    </record>
+
+</odoo>
+        <!--<odoo>-->
+<!--    <record id="view_account_asset_form_inherit" model="ir.ui.view">-->
+<!--        <field name="name">view.account.asset.form.inherit</field>-->
+<!--        <field name="model">account.asset</field>-->
+<!--        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <xpath expr="//button[@name='validate']" position="before">-->
+<!--                <button name="action_asset_move" type="object" string="Move Asset" class="oe_highlight"-->
+<!--                        states="open"-->
+<!--                        groups="ivs_asset_management.asset_move_access_group"/>-->
+<!--                <button name="action_print_asset" type="object" string="Print QR"-->
+<!--                        attrs="{'invisible':[('print_qr','=',False)]}"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//h1" position="after">-->
+<!--                <div attrs="{'invisible':[('state','=','model')]}">-->
+<!--                    <h2>-->
+<!--                        <field name="asset_code" readonly="1"/>-->
+<!--                    </h2>-->
+<!--                </div>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//div[hasclass('oe_title')]" position="before">-->
+<!--                <field name="image_1920" widget="image" class="oe_avatar"-->
+<!--                       options="{'preview_image': 'image_1920'}"-->
+<!--                       attrs="{'invisible':[('state','=','model')]}"/>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//notebook" position="inside">-->
+<!--                <page string="Asset Details">-->
+<!--                    <group>-->
+<!--                        <field name="description"/>-->
+<!--                        <field name="responsible_id"/>-->
+<!--                        <field name="have_model_class" invisible="1"/>-->
+<!--                        <field name="required_location" invisible="1"/>-->
+<!--                        <field name="print_qr" invisible="1"/>-->
+<!--                        <field name="asset_class_id"-->
+<!--                               attrs="{'readonly':['|',('have_model_class','=',True),('state','=','open')],'required':[('state','!=','model')]}"/>-->
+<!--                        <field name="location_id"-->
+<!--                               attrs="{'required':[('required_location','=',True)],'readonly':[('state','!=','draft')]}"/>-->
+<!--                    </group>-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//field[@name='prorata_computation_type']" position="after">-->
+<!--                <field name="model_class_id"/>-->
+<!--            </xpath>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="view_account_asset_search_inherit" model="ir.ui.view">-->
+<!--        <field name="name">asset.search.inherit</field>-->
+<!--        <field name="model">account.asset</field>-->
+<!--        <field name="inherit_id" ref="account_asset.view_account_asset_search"/>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <xpath expr="//field[@name='name']" position="attributes">-->
+<!--                <attribute name="filter_domain">-->
+<!--                    ['|',('name', 'ilike', self),('asset_code', 'ilike', self)]-->
+<!--                </attribute>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//group" position="inside">-->
+<!--                <filter string="Asset Class" name="asset_class" domain="[]" context="{'group_by':'asset_class_id'}"/>-->
+<!--                <filter string="Asset Location" name="asset_location" domain="[]" context="{'group_by':'location_id'}"/>-->
+<!--                <filter string="Asset Responsible" name="asset_responsible" domain="[]"-->
+<!--                        context="{'group_by':'responsible_id'}"/>-->
+<!--            </xpath>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="view_account_asset_purchase_tree_inherit" model="ir.ui.view">-->
+<!--        <field name="name">account.asset.tree.inherit</field>-->
+<!--        <field name="model">account.asset</field>-->
+<!--        <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>-->
+<!--        <field name="arch" type="xml">-->
+
+<!--            <xpath expr="//field[@name='name']" position="after">-->
+<!--                <field name="asset_code"/>-->
+<!--                <field name="responsible_id" optional="hide"/>-->
+<!--                <field name="asset_class_id" optional="hide"/>-->
+<!--                <field name="location_id" optional="hide"/>-->
+<!--            </xpath>-->
+
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="model_account_asset_action_confirm" model="ir.actions.server">-->
+<!--        <field name="name">Confirm</field>-->
+<!--        <field name="model_id" ref="ivs_asset_management.model_account_asset"/>-->
+<!--        <field name="binding_model_id" ref="ivs_asset_management.model_account_asset"/>-->
+<!--        <field name="binding_view_types">tree</field>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">action = records.action_validate()</field>-->
+<!--    </record>-->
+
+<!--    <record id="model_account_asset_action_print" model="ir.actions.server">-->
+<!--        <field name="name">Print QR</field>-->
+<!--        <field name="model_id" ref="ivs_asset_management.model_account_asset"/>-->
+<!--        <field name="binding_model_id" ref="ivs_asset_management.model_account_asset"/>-->
+<!--        <field name="binding_view_types">tree</field>-->
+<!--        <field name="state">code</field>-->
+<!--        <field name="code">action = records.action_print_asset()</field>-->
+<!--    </record>-->
+<!--    <record id="asset_class_form_view" model="ir.ui.view">-->
+<!--        <field name="name">asset.class.form.view</field>-->
+<!--        <field name="model">asset.class</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="">-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="name"/>-->
+<!--                            <field name="company_id" invisible="1"/>-->
+<!--                            <field name="sequence_id" required="1"-->
+<!--                                   context="{'default_is_asset_class':True,'default_implementation':'no_gap'}"/>-->
+<!--                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>-->
+<!--                        </group>-->
+<!--                        <group string="Applicable On">-->
+<!--                            <field name="applicable_on_asset_model"/>-->
+<!--                            <field name="applicable_on_asset"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+
+<!--                    <group>-->
+<!--                        <group string="Printing Format">-->
+<!--                            <field name="print_qr"/>-->
+<!--                            <field name="width" invisible="not print_qr" required="print_qr"/>-->
+<!--                            <field name="height" invisible="not print_qr" required="print_qr"/>-->
+<!--                            <field name="font_size" placeholder="width * 37.8/10"-->
+<!--                                   invisible="not print_qr" required="print_qr"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+
+<!--                    <group>-->
+<!--                        <group string="Asset Location">-->
+<!--                            <field name="require_location"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                </sheet>-->
+
+<!--                &lt;!&ndash; ✅ Odoo 19 chatter &ndash;&gt;-->
+<!--                <chatter/>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+
+<!--</odoo>-->
