@@ -1,0 +1,20 @@
+<odoo>
+    <record id="asset_move_access_group" model="res.groups">
+        <field name="name">Move Asset Access</field>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="asset_class_company_rule" model="ir.rule">
+        <field name="name">Asset Class multi company rule</field>
+        <field name="model_id" ref="model_asset_class"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="asset_location_company_rule" model="ir.rule">
+        <field name="name">Asset Location multi company rule</field>
+        <field name="model_id" ref="model_asset_location"/>
+        <field eval="True" name="global"/>
+        <field name="domain_force">['|',('company_id','=',False),('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
