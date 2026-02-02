@@ -1,0 +1,127 @@
+<odoo>
+
+    <record id="asset_adjustment_report" model="ir.actions.report">
+        <field name="name">Asset Adjustment</field>
+        <field name="model">asset.adjustment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ivs_asset_adjustment.asset_adjustment_template</field>
+        <field name="report_file">ivs_asset_adjustment.asset_adjustment_template</field>
+        <field name="binding_model_id" ref="model_asset_adjustment"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="asset_adjustment_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="ivs_asset_adjustment.report_asset_adjustment_template"/>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="report_asset_adjustment_template">
+        <t t-call="web.external_layout">
+            <div class="page" style="margin-top:-35px;">
+                <h2 class="mt-4" >
+                    <span t-field="doc.name"/>
+                </h2>
+                <h4 class="mt-4">
+                    <span t-field="doc.state"/>
+                </h4>
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Location :</strong>
+                        <span t-field="doc.location_id.name"/>
+                    </div>
+                    <div class="col-6">
+                        <strong>Date :</strong>
+                        <span t-field="doc.date"/>
+                    </div>
+                </div>
+                <br/>
+                <br/>
+                <div>
+                    <h5>Adjusted Locations</h5>
+                    <table class="table table-sm o_main_table mt-4">
+                        <thead style="display: table-row-group">
+                            <tr class="text-left">
+                                <th class="text-start">Location</th>
+                                <th class="text-start">Code</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.line_ids.mapped('asset_location_id')" t-as="line">
+                                <tr>
+                                    <td t-esc="line.name"/>
+                                    <td t-esc="line.code"/>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <br/>
+                <br/>
+                <div>
+                    <h5>Adjusted Assets</h5>
+                    <table class="table table-sm o_main_table mt-4">
+                        <thead style="display: table-row-group">
+                            <tr class="text-left">
+                                <th class="text-start">Location</th>
+                                <th class="text-start">Asset</th>
+                                <th class="text-start">Code</th>
+                                <th class="text-start">Different Location</th>
+                                <th class="text-start">Existing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.line_ids" t-as="line">
+                                <tr>
+                                    <td style="border-width: 1px;border-color: #eeeeee;">
+                                        <span t-esc="line.asset_location_id.name"/>
+                                    </td>
+                                    <td style="border-width: 1px;border-color: #eeeeee;">
+                                        <span t-esc="line.asset_id.name"/>
+                                    </td>
+                                    <td style="border-width: 1px;border-color: #eeeeee;">
+                                        <span t-esc="line.asset_code"/>
+                                    </td>
+                                    <td style="border-width: 1px;border-color: #eeeeee;">
+                                        <span t-esc="line.different_asset_location_id.name"/>
+                                    </td>
+                                    <td style="border-width: 1px;border-color: #eeeeee;">
+                                        <t t-if="line.is_exist">
+                                            <input type="checkbox" class="form-check-input" checked="True"/>
+                                        </t>
+                                        <t t-else="">
+                                            <input type="checkbox" class="form-check-input"/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-6">
+                        <strong>Confirmed By</strong>
+                    </div>
+                    <div class="col-6">
+                        <strong>Approved By</strong>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <span t-esc="doc.confirmed_user_id.name"/>
+                    </div>
+                    <div class="col-6">
+                        <span t-esc="doc.approved_user_id.name"/>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+
+</odoo>
