@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+   <record id="sequence_view_inherit" model="ir.ui.view">
+       <field name="name">sequence.view.inherit</field>
+       <field name="model">ir.sequence</field>
+       <field name="inherit_id" ref="base.sequence_view"/>
+       <field name="arch" type="xml">
+
+           <xpath expr="//field[@name='use_date_range']" position="after">
+               <field name="is_asset_class"/>
+           </xpath>
+
+       </field>
+   </record>
+</odoo>
