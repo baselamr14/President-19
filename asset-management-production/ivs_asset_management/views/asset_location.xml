@@ -1,0 +1,180 @@
+<!--<odoo>-->
+<!--    <record id="asset_location_from_view" model="ir.ui.view">-->
+<!--        <field name="name">asset.location.form.view</field>-->
+<!--        <field name="model">asset.location</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="">-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="name" />-->
+<!--                            <field name="code" required="1"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="parent_id"/>-->
+<!--                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                    <notebook>-->
+<!--                        <page string="Sub-Location">-->
+<!--                            <field name="child_ids" readonly="1"/>-->
+<!--                        </page>-->
+<!--&lt;!&ndash;                        <page string="Sub-Location Charts">&ndash;&gt;-->
+<!--&lt;!&ndash;                            <field name="sub_locations"/>&ndash;&gt;-->
+<!--&lt;!&ndash;                        </page>&ndash;&gt;-->
+<!--                        <page string="Assets">-->
+<!--                            <field name="asset_ids" readonly="1"/>-->
+<!--                        </page>-->
+<!--                    </notebook>-->
+<!--                </sheet>-->
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" options="{'open_attachments': True}"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="asset_location_tree_view" model="ir.ui.view">-->
+<!--        <field name="name">asset.location.tree.view</field>-->
+<!--        <field name="model">asset.location</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <tree sample="1">-->
+<!--                <field name="name"/>-->
+<!--                <field name="code"/>-->
+<!--                <field name="parent_id"/>-->
+<!--                <field name="company_id" groups="base.group_multi_company"/>-->
+<!--            </tree>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="asset_location_action_view" model="ir.actions.act_window">-->
+<!--        <field name="name">Asset Location</field>-->
+<!--        <field name="type">ir.actions.act_window</field>-->
+<!--        <field name="res_model">asset.location</field>-->
+<!--        <field name="view_mode">tree,form</field>-->
+<!--    </record>-->
+
+<!--    <menuitem id="asset_location_menu" name="Asset Location"-->
+<!--              parent="asset_management_categ"-->
+<!--              action="asset_location_action_view"-->
+<!--              sequence="3"/>-->
+
+<!--</odoo>-->
+<!--<odoo>-->
+<!--    <record id="asset_location_from_view" model="ir.ui.view">-->
+<!--        <field name="name">asset.location.form.view</field>-->
+<!--        <field name="model">asset.location</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="">-->
+<!--                <sheet>-->
+<!--                    <group>-->
+<!--                        <group>-->
+<!--                            <field name="name"/>-->
+<!--                            <field name="code" required="1"/>-->
+<!--                        </group>-->
+<!--                        <group>-->
+<!--                            <field name="parent_id"/>-->
+<!--                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>-->
+<!--                        </group>-->
+<!--                    </group>-->
+<!--                    <notebook>-->
+<!--                        <page string="Sub-Location">-->
+<!--                            <field name="child_ids" readonly="1"/>-->
+<!--                        </page>-->
+<!--                        <page string="Assets">-->
+<!--                            <field name="asset_ids" readonly="1"/>-->
+<!--                        </page>-->
+<!--                    </notebook>-->
+<!--                </sheet>-->
+<!--                <div class="oe_chatter">-->
+<!--                    <field name="message_follower_ids" options="{'open_attachments': True}"/>-->
+<!--                    <field name="message_ids"/>-->
+<!--                </div>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="asset_location_tree_view" model="ir.ui.view">-->
+<!--        <field name="name">asset.location.tree.view</field>-->
+<!--        <field name="model">asset.location</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <list sample="1">-->
+<!--                <field name="name"/>-->
+<!--                <field name="code"/>-->
+<!--                <field name="parent_id"/>-->
+<!--                <field name="company_id" groups="base.group_multi_company"/>-->
+<!--            </list>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="asset_location_action_view" model="ir.actions.act_window">-->
+<!--        <field name="name">Asset Location</field>-->
+<!--        <field name="type">ir.actions.act_window</field>-->
+<!--        <field name="res_model">asset.location</field>-->
+<!--        <field name="view_mode">list,form</field>-->
+<!--    </record>-->
+
+<!--    <menuitem id="asset_location_menu" name="Asset Location"-->
+<!--              parent="asset_management_categ"-->
+<!--              action="asset_location_action_view"-->
+<!--              sequence="3"/>-->
+<!--</odoo>-->
+<odoo>
+    <record id="asset_location_from_view" model="ir.ui.view">
+        <field name="name">asset.location.form.view</field>
+        <field name="model">asset.location</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="code" required="1"/>
+                        </group>
+                        <group>
+                            <field name="parent_id"/>
+                            <field name="company_id" options="{'no_create': True}" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Sub-Location">
+                            <field name="child_ids" readonly="1"/>
+                        </page>
+                        <page string="Assets">
+                            <field name="asset_ids" readonly="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+
+                <!-- ✅ Odoo 19 chatter -->
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <record id="asset_location_tree_view" model="ir.ui.view">
+        <field name="name">asset.location.tree.view</field>
+        <field name="model">asset.location</field>
+        <field name="arch" type="xml">
+            <list sample="1">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="parent_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="asset_location_action_view" model="ir.actions.act_window">
+        <field name="name">Asset Location</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">asset.location</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="asset_location_menu" name="Asset Location"
+              parent="asset_management_categ"
+              action="asset_location_action_view"
+              sequence="3"/>
+</odoo>
