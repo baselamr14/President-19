@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_account_asset_form_inherit" model="ir.ui.view">
+        <field name="name">account.asset.form.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='original_value']" position="attributes">
+                <attribute name="string">Current Value</attribute>
+            </xpath>
+            <xpath expr="//field[@name='original_value']" position="after">
+                <field name="org_val" widget="monetary" options="{'currency_field': 'currency_id'}"
+                       attrs="{'invisible': [('state', '=', 'model')], 'readonly': [('state','!=','draft')]}"/>
+                <field name="accumulated_depreciation" widget="monetary" options="{'currency_field': 'currency_id'}"
+                       attrs="{'invisible': [('state', '=', 'model')], 'readonly': [('state','!=','draft')]}"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_account_asset_purchase_tree_inherit" model="ir.ui.view">
+        <field name="name">account.asset.tree.inherit</field>
+        <field name="model">account.asset</field>
+        <field name="inherit_id" ref="account_asset.view_account_asset_purchase_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='original_value']" position="attributes">
+                <attribute name="string">Current Value</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='original_value']" position="after">
+                <field name="org_val" optional="hide"/>
+                <field name="accumulated_depreciation" optional="hide"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>
