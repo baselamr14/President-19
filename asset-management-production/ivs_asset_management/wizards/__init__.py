@@ -1,1 +1,0 @@
-from . import asset_move_wizard
