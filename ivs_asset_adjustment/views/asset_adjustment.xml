@@ -43,7 +43,8 @@
                     <button name="action_cancel" type="object" string="Cancel"
                             invisible="state != 'confirm'"/>
 
-                    <field name="state" widget="statusbar" statusbar_visible="draft,running,confirm"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,running,confirm,approve,cancel"/>
                 </header>
 
                 <sheet>
@@ -55,7 +56,6 @@
 
                     <group>
                         <group>
-                            <!-- attrs readonly => readonly expression -->
                             <field name="location_id" readonly="state in ('confirm','approve')"/>
                             <field name="method" readonly="state in ('confirm','approve')"/>
                         </group>
@@ -75,18 +75,23 @@
 
                     <notebook>
                         <page string="Assets">
-                            <field name="line_ids"
-                                   context="{'tree_view_ref': 'ivs_asset_adjustment.asset_adjustment_line_list_view'}"/>
+                            <field name="line_ids" readonly="1">
+                                <list>
+                                    <field name="asset_location_id"/>
+                                    <field name="asset_id"/>
+                                    <field name="asset_code"/>
+                                    <field name="different_asset_location_id"/>
+                                    <field name="is_exist"/>
+                                </list>
+                            </field>
                         </page>
                     </notebook>
-
                 </sheet>
 
-                <div class="oe_chatter">
-                    <field name="message_follower_ids" options="{'open_attachments': True}"/>
-                    <field name="message_ids"/>
-                </div>
+                <!-- Odoo 19 way -->
+                <chatter/>
             </form>
+
         </field>
     </record>
 
