@@ -47,13 +47,14 @@ class AssetClass(models.Model):
     width = fields.Float(default=5)
     height = fields.Float(default=5)
 
-    font_size = fields.Float(compute="_compute_font_size", store=True)
+    # font_size = fields.Float(compute="_compute_font_size", store=True)
+    font_size = fields.Float()
     require_location = fields.Boolean(string="Required Asset Location")
 
-    @api.depends('width', 'print_qr')
-    def _compute_font_size(self):
-        for rec in self:
-            if rec.print_qr and rec.width:
-                rec.font_size = rec.width * 37.795 / 10
-            else:
-                rec.font_size = 0.0
+    # @api.depends('width', 'print_qr')
+    # def _compute_font_size(self):
+    #     for rec in self:
+    #         if rec.print_qr and rec.width:
+    #             rec.font_size = rec.width * 37.795 / 10
+    #         else:
+    #             rec.font_size = 0.0
