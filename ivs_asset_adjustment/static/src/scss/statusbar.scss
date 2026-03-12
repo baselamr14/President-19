@@ -1,8 +1,8 @@
-.o_form_view .o_field_widget[name="state"] .o_statusbar_status .o_arrow_button.o_arrow_button_current[data-value="approve"] {
+.o_field_statusbar .o_arrow_button.o_arrow_button_current[data-value="approve"] {
     background-color: #28a745 !important;
     color: #fff !important;
 }
 
-.o_form_view .o_field_widget[name="state"] .o_statusbar_status .o_arrow_button.o_arrow_button_current[data-value="approve"]::before {
+.o_field_statusbar .o_arrow_button.o_arrow_button_current[data-value="approve"]::before {
     background-color: #28a745 !important;
 }
