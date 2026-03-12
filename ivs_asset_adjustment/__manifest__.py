@@ -18,6 +18,11 @@
         'reports/adjustment_report.xml',
         'wizards/asset_adjustment_wizard.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'asset_adjustment/static/src/scss/statusbar.scss',
+        ],
+    },
     'installable': True,
     'auto_install': False,
     'application': True,
