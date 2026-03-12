@@ -42,12 +42,12 @@
 
                     <button name="action_cancel" type="object" string="Cancel"
                             invisible="state != 'confirm'"/>
-                    <field name="state" widget="statusbar"
-                       statusbar_visible="draft,running,confirm,approve,cancel"
-                       statusbar_colors="{'approve':'success','cancel':'danger','running':'warning'}"/>
-
                     <!-- <field name="state" widget="statusbar"
-                           statusbar_visible="draft,running,confirm,approve,cancel"/> -->
+                       statusbar_visible="draft,running,confirm,approve,cancel"
+                       statusbar_colors="{'approve':'success','cancel':'danger','running':'warning'}"/> -->
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,running,confirm,approve,cancel"/>
                 </header>
 
                 <sheet>
